@@ -1,0 +1,21 @@
+version: "3"
+services:
+  respiratory-sound:
+    restart: always
+    build: .
+    container_name: "respiratory-sound"
+    tty: true
+    privileged: true
+    volumes:
+      - ./notebooks:/tf/notebooks
+      - ./dataset:/tf/dataset
+    command: jupyter-lab --allow-root --ip=0.0.0.0 --port=8888 --no-browser --NotebookApp.token='' --notebook-dir=/tf
+    ports:
+      - "8888:8888"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
